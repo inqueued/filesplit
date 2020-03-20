@@ -17,16 +17,21 @@ namespace FileSplit
                 PrintUsage();
                 return;
             }
-            string filename = Path.GetFileNameWithoutExtension(arguments.FileName);
-            string extension = Path.GetExtension(arguments.FileName);
+            ProcessFile(arguments);
+        }
+
+        static void ProcessFile(FileSplitArguments fileSplitArguments)
+        {
+            string filename = Path.GetFileNameWithoutExtension(fileSplitArguments.FileName);
+            string extension = Path.GetExtension(fileSplitArguments.FileName);
             //Writing Files
-            using StreamReader sr = new StreamReader(arguments.FileName);
+            using StreamReader sr = new StreamReader(fileSplitArguments.FileName);
             bool done = false;
             for (int fileNumber = 1; !done; fileNumber++)
             {
-                using StreamWriter sw = new StreamWriter(arguments.OutputPath + filename + "-" + fileNumber + extension);
+                using StreamWriter sw = new StreamWriter(fileSplitArguments.OutputPath + filename + "-" + fileNumber + extension);
                 Console.WriteLine("Writing File: " + filename + "-" + fileNumber + extension);
-                for (int lineNumber = 0; lineNumber < arguments.NumberOfLines; lineNumber++)
+                for (int lineNumber = 0; lineNumber < fileSplitArguments.NumberOfLines; lineNumber++)
                 {
                     string line = sr.ReadLine();
                     if (line == null)
@@ -38,6 +43,7 @@ namespace FileSplit
                 }
             }
         }
+
         static void PrintUsage()
         {
             Console.WriteLine("Usage: FileSplit.exe <file path> <output path> <number of lines>");
